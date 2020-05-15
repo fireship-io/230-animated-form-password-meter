@@ -5,29 +5,45 @@
   let showPassword = false;
   let disabled = true;
 
+  let validations = []
+
   function validatePassword(e) {
     const password = e.target.value;
 
-    strength =
-      +(password.length > 5) +
-      +(password.search(/[A-Z]/) > -1) +
-      +(password.search(/[0-9]/) > -1) +
-      +(password.search(/[$&+,:;=?@#]/) > -1);
+    // strength =
+    //   (password.length > 5) +
+    //   (password.search(/[A-Z]/) > -1) +
+    //   (password.search(/[0-9]/) > -1) +
+    //   (password.search(/[$&+,:;=?@#]/) > -1);
+
+    validations = [
+        (password.length > 5), 
+        (password.search(/[A-Z]/) > -1), 
+        (password.search(/[0-9]/) > -1), 
+        (password.search(/[$&+,:;=?@#]/) > -1) 
+    ]
+
+    strength = validations.reduce((acc, cur) => acc + cur, 0)
+
   }
 </script>
 
 <style>
+    form {
+        --text-color: #afafaf;
+    }
+
   .field {
     width: 100%;
     margin: 0 auto;
     position: relative;
-    border-bottom: 2px dashed #afafaf;
+    border-bottom: 2px dashed var(--text-color);
     margin: 4rem auto 1rem;
     transition: 500ms;
   }
 
   .label {
-    color: #afafaf;
+    color:var(--text-color);
     font-size: 1.2rem;
   }
 
@@ -138,6 +154,14 @@
     margin-top: 20px;
   }
 
+  ul {
+      list-style: none;
+      margin: 10px 0;
+      padding: 0;
+      font-size: 0.7rem;
+      text-align: left;
+  }
+
   /* Buttons */
 
   button {
@@ -152,8 +176,8 @@
   }
 
   button:disabled {
-    border-color: #b6b6b6;
-    color: #b6b6b6;
+    border-color: var(--text-color);
+    color: var(--text-color);
   }
 
   .toggle-password {
@@ -163,6 +187,8 @@
     right: 0.25rem;
     bottom: 0.5rem;
   }
+
+
 </style>
 
 <main>
@@ -198,7 +224,16 @@
       <span class="bar bar-4" class:bar-show={strength > 3} />
     </div>
 
-    <div class="strength-text">{strengthText[strength]}</div>
+    {#if validations.length}
+    <ul>
+        <li> {validations[0] ? '✔️' : '❌'} must be at least 5 characters</li>
+        <li> {validations[1] ? '✔️' : '❌'} must contain a capital letter</li>
+        <li> {validations[2] ? '✔️' : '❌'} must contain a number</li>
+        <li> {validations[3] ? '✔️' : '❌'} must contain one of $&+,:;=?@#</li>
+    </ul>
+    {/if}
+
+    <!-- <div class="strength-text">{strengthText[strength]}</div> -->
 
     <button disabled={strength < 4}>Sign Up</button>
 
