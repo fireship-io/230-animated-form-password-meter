@@ -10,12 +10,6 @@
   function validatePassword(e) {
     const password = e.target.value;
 
-    // strength =
-    //   (password.length > 5) +
-    //   (password.search(/[A-Z]/) > -1) +
-    //   (password.search(/[0-9]/) > -1) +
-    //   (password.search(/[$&+,:;=?@#]/) > -1);
-
     validations = [
         (password.length > 5), 
         (password.search(/[A-Z]/) > -1), 
